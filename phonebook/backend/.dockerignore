@@ -3,4 +3,4 @@
 dist
 node_modules
 Dockerfile
-.env1
+package-lock.json

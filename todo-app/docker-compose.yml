@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
     container_name: todo-frontend
     environment:
-      - VITE_BACKEND_URL=http://localhost:8080/paskasaatana
+      - VITE_BACKEND_URL=http://localhost:8080/api
     depends_on:
       - api
 

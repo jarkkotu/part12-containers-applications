@@ -1,0 +1,28 @@
+services:
+  api:
+    image: phonebook-backend
+    build:
+      context: ./phonebook-backend/.
+      dockerfile: Dockerfile
+    container_name: phonebook-backend
+    environment:
+      - MONGO_URL=<insert>
+  app:
+    image: phonebook-frontend
+    build:
+      context: ./phonebook-frontend/.
+      dockerfile: Dockerfile
+    container_name: phonebook-frontend
+    depends_on:
+      - api
+
+  nginx:
+    image: nginx:1.20.1-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - app
+      - api
