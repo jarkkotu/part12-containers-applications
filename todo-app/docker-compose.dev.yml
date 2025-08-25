@@ -3,9 +3,9 @@ services:
     image: todo-backend-dev
     build:
       context: ./todo-backend/.
-      dockerfile: ./todo-backend/dev.Dockerfile
+      dockerfile: dev.Dockerfile
     volumes:
-      - ./todo-backend/:/usr/src/app
+      - ./todo-backend/:/usr/src/app/backend
     container_name: todo-backend-dev
     environment:
       - REDIS_URL=redis://redis:6379
@@ -18,19 +18,21 @@ services:
       MONGO_INITDB_DATABASE: the_database
     volumes:
       - ./todo-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-      - mongo_data:/data/db
+      - mongo_data_dev:/data/db
+    container_name: mongo-dev
   redis:
     image: redis
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - ./todo-backend/redis_data:/data
+      - ./todo-backend/redis_data_dev:/data
+    container_name: redis-dev
   app:
     image: todo-frontend-dev
     build:
       context: ./todo-frontend/.
-      dockerfile: ./todo-frontend/dev.Dockerfile
+      dockerfile: dev.Dockerfile
     volumes:
-      - ./todo-frontend/:/usr/src/app
+      - ./todo-frontend/:/usr/src/app/frontend
     container_name: todo-frontend-dev
     environment:
       - VITE_BACKEND_URL=http://localhost:8080/api
@@ -40,10 +42,10 @@ services:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
     ports:
       - 8080:80
-    container_name: reverse-proxy
+    container_name: reverse-proxy-dev
     depends_on:
       - app
       - api
 
 volumes:
-  mongo_data:
+  mongo_data_dev:
